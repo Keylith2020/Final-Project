@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>administrator/title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+        }
+
+        .topbar {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+        }
+
+        .topbar a:hover {
+            background-color: #575757;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">IT-4320 Trip Reservation System</div>
+        <div>
+            <a href="/">Home</a>
+            <a href="/admin">Admin</a>
+            <a href="/reservation">Reservation</a>
+        </div>
+    </div>
+    <h1>Administrator Login</h1>
+    <br>
+    <form method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="userName" placeholder=" " required>
+        <br>
+        <label for="password">Password: </label>
+        <input type="text" name="passWord" placeholder=" " required>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
