@@ -4,7 +4,6 @@
     <h1>{% block title %} Reserve Your Seat {% endblock %}</h1>
     <br>
     <h2>Seating Chart</h2>
-    <p>X = Reserved Seat : O = Available Seat</p>
     <br>
 
     <br>
@@ -12,9 +11,14 @@
         {% for row in range(1, 13) %}
             <tr>
                 {% for seat in range(1, 5) %}
-                    <td>
-                        Row {{ row }} Seat {{ seat }}
-                    </td>
+                <td style="padding: 10px; text-align: center; border: 1 px solid black;">
+                    {% if (row, seat) in reserved_seats %}
+                        X
+                    {% else %}
+                        O
+                    {% endif %}
+                </td>
+                
                 {% endfor %}
             </tr>
         {% endfor %}
