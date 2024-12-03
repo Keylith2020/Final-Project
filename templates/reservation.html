@@ -8,6 +8,18 @@
     <br>
 
     <br>
+    <table style="border: 1px solid black; border-collapse: collapse;"> <!--makes border, location of code can change.--> 
+        {% for row in range(1, 13) %}
+            <tr>
+                {% for seat in range(1, 5) %}
+                    <td>
+                        Row {{ row }} Seat {{ seat }}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    
     <form method="POST">
         <label for="firstname">First Name</label>
         <input type="text" name="firstName" placeholder=" " required>
