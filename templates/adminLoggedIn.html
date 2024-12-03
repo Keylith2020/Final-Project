@@ -1,19 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Reserve Your Seat {% endblock %}</h1>
-    <br>
-    <label for="seatingchart">Printing Seating Chart...</label>
-    <br>
-    <label for="totalsales">Total Sales:</label>
-    <br>
-    <form method="POST">
-        <label for="username">Username:</label>
-        <input type="text" name="userName" placeholder=" " required>
+    <h1>{% block title %} Admin Dashboard - Reserve Your Seat {% endblock %}</h1>
+
+    {% if 'admin' in session %}
+        <!-- If the admin is logged in, show the seating chart and total sales -->
+        <h2>Seating Chart</h2>
+        <table>
+            <tr>
+                <th>Row</th>
+                <th>Seat</th>
+            </tr>
+            {% for row, seat in reserved_seats %}
+            <tr>
+                <td>{{ row }}</td>
+                <td>{{ seat }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Total Sales</h2>
+        <p>Total Reservations: {{ total_sales }}</p>
         <br>
-        <label for="password">Password: </label>
-        <input type="text" name="passWord" placeholder=" " required>
-        <br>
-        <button type="submit">Submit</button>
-    </form>
+        <a href="{{ url_for('admin_logout') }}">Logout</a>
+    {% else %}
+        <p>Please log in to access the admin dashboard.</p>
+    {% endif %}
 {% endblock %}
