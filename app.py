@@ -9,13 +9,13 @@ app = Flask(__name__)
 app.config['API_KEY'] = 'API_KEY_HERE'
 app.config["DEBUG"] = True
 
-#DEBUG for reserved_seats (row, seat) this should be empty for turn in. Could also be moved elsewhere?
+#DEBUG for reserved_seats (row, seat) this should be empty for turn in.
 reserved_seats = [(5,1), (3,3), (7,2)]
 
 
 @app.route('/')
 def index():
-    return render_template('reservation.html', reserved_seats=reserved_seats) # reserved_seats=reserved_seats can be moved?
+    return render_template('index.html', reserved_seats=reserved_seats) # reserved_seats=reserved_seats can be moved?
 
 @app.route('/admin')
 def admin():
@@ -37,8 +37,7 @@ def reservation():
             reservation_code = generate_reservation_code()
             # TODO maybe the def that stores it in reservations goes here?
             #Displaying info to user (Debug)
-            flash(f'Reservation successful! Your reservation code is {reservation_code}.
-            Row: {row}, Seat: {seat}')
+            flash(f'Reservation successful! Your reservation code is {reservation_code}.Row: {row}, Seat: {seat}')
         
             time.sleep(5)
             return redirect(url_for('index'))
