@@ -3,22 +3,17 @@
 {% block content %}
     <h1>{% block title %} Home {% endblock %}</h1>
     <br>
-    <p>Welcome to the IT-4320 trip reservation system. Use the select box to choose whether to make a reservation or log in as administrator</p>
-    <br>
-    <label for="option">Choose Menu Option:</label>
-            <select name="option" id="option">
-                <option value="admin">Admin</option>
-                <option value="reservation">Reservation</option>
-            </select>
-    <br>
-    <button type="submit">Submit</button>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    <li class="{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+    <p>Welcome to the IT-4320 trip reservation system!</p>
+    <form method="post">
+        <br>
+        <label for="option">What would you like to do?</label>
+                <select name="option" id="option">
+                    <option value="">Select an option</option>
+                    <option value="admin">Log in as an administrator</option>
+                    <option value="reservation">Reserve a seat</option>
+                </select>
+        <br>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
 {% endblock %}
