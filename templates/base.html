@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %}</title>
     <style>
-        
         * {
             margin: 0;
             padding: 0;
@@ -40,43 +39,49 @@
             font-weight: bold;
         }
 
+        .content-wrapper {
+            border: 2px solid red; /* Thin red border around the perimeter */
+            padding: 10px; /* Add padding to avoid content touching the border */
+            margin: 20px; /* Add margin to create space around the border */
+            background-color: white;
+        }
+
         .content {
             padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
+        .alert {
+            margin-bottom: 20px;
+            padding: 10px;
+            color: #ffffff;
+            background-color: #ff4d4d;
+            border-radius: 5px;
+        }
+
         table {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
         }
 
-<<<<<<< Updated upstream
-        td {
-=======
-        td, th {
->>>>>>> Stashed changes
-        border: 1px solid #ddd;
-        padding: 8px;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
         }
 
-        tr:nth-child(even){background-color: #f2f2f2;}
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
 
-<<<<<<< Updated upstream
-        .columns, .rows{
+        .columns, .rows {
             background-color: slategray;
             color: white;
             text-align: center;
-=======
-        th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: #04AA6D;
-        color: white;
->>>>>>> Stashed changes
         }
     </style>
 </head>
@@ -89,12 +94,14 @@
             <a href="/reservation">Reservation</a>
         </div>
     </div>
-    <div class="content">
-        {% for message in get_flashed_messages() %}
-            <div class="alert">{{ message }}</div>
-        {% endfor %}
+    <div class="content-wrapper">
+        <div class="content">
+            {% for message in get_flashed_messages() %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
 
-        {% block content %} {% endblock %}
+            {% block content %} {% endblock %}
+        </div>
     </div>
 </body>
 </html>

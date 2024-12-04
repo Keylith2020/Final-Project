@@ -1,23 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Admin Dashboard - Reserve Your Seat {% endblock %}</h1>
+    <h1>Admin Dashboard - Reserve Your Seat</h1>
 
     {% if 'admin' in session %}
         <!-- If the admin is logged in, show the seating chart and total sales -->
-        <h2>Seating Chart</h2>
-        <table>
-            <tr>
-                <th>Row</th>
-                <th>Seat</th>
-            </tr>
-            {% for row, seat in reserved_seats %}
-            <tr>
-                <td>{{ row }}</td>
-                <td>{{ seat }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <h2 style="font-weight: bold; margin-bottom: 10px;">Seating Chart</h2>
+        <div style="overflow-x: auto; display: inline-block;">
+            <table style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="padding: 4px; border: 1px solid black;">Row</th>
+                        {% for col in range(1, 5) %}
+                            <th style="padding: 4px; border: 1px solid black;">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row_seats in seating_chart %}
+                        <tr>
+                            <td style="padding: 4px; border: 1px solid black;">{{ loop.index }}</td>
+                            {% for seat in row_seats %}
+                                <td style="padding: 4px; border: 1px solid black; width: 20px; text-align: center;">{{ seat }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
         <h2>Total Sales</h2>
         <p>Total Reservations: {{ total_sales }}</p>

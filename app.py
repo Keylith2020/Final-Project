@@ -71,7 +71,21 @@ def admin_dashboard():
 
     conn.close()
 
-    return render_template('adminLoggedIn.html', reserved_seats=reserved_seats_db, total_sales=total_sales)
+    # Convert list of tuples to a set for easy lookup
+    reserved_seats = set((seat['row'], seat['seat']) for seat in reserved_seats_db)
+
+    # Generate the seating chart as a 12x4 grid
+    seating_chart = []
+    for row in range(1, 13):
+        row_seats = []
+        for col in range(1, 5):
+            if (row, col) in reserved_seats:
+                row_seats.append('X')
+            else:
+                row_seats.append('O')
+        seating_chart.append(row_seats)
+
+    return render_template('adminLoggedIn.html', seating_chart=seating_chart, total_sales=total_sales)
 
 
 @app.route('/admin_logout')
@@ -121,4 +135,3 @@ def get_cost_matrix():
 
 if __name__ == '__main__':
     app.run()
-
