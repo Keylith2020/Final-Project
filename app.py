@@ -74,11 +74,11 @@ def admin_dashboard():
     # Convert list of tuples to a set for easy lookup
     reserved_seats = set((seat['row'], seat['seat']) for seat in reserved_seats_db)
 
-    # Generate the seating chart as a 12x4 grid
+    # Generate the seating chart as a 4x12 grid
     seating_chart = []
-    for row in range(1, 13):
+    for row in range(1, 5):
         row_seats = []
-        for col in range(1, 5):
+        for col in range(1, 13):
             if (row, col) in reserved_seats:
                 row_seats.append('X')
             else:
@@ -95,7 +95,7 @@ def admin_logout():
     return redirect(url_for('admin'))  # Redirect back to the login page
 
 
-@app.route('/reservation', methods=['POST'])
+@app.route('/reservation', methods=['GET', 'POST'])
 def reservation():
     if request.method == 'POST':
         row = int(request.form['rowOption'])
@@ -118,14 +118,15 @@ def reservation():
             flash(f'Reservation successful! Your reservation code is {reservation_code}. Row: {row}, Seat: {seat}')
         
         conn.close()  # Close the database connection
-        time.sleep(5)
         return redirect(url_for('index'))
     
-    def generate_reservation_code(length=12):
-        characters = string.ascii_uppercase + string.digits
-        return ''.join(random.choice(characters) for _ in range(length))
+    return render_template('reservation.html', reserved_seats=reserved_seats)
 
-    return render_template('reservation.html')
+def generate_reservation_code(length=12):
+    characters = string.ascii_uppercase + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))
+
+
 
 
 def get_cost_matrix():
