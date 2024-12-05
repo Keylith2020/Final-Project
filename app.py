@@ -19,6 +19,19 @@ def get_db_connection():
 # DEBUG for reserved_seats (row, seat) this should be empty for turn in.
 reserved_seats = [(5, 1), (3, 3), (7, 2)]
 
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    if request.method == 'POST':
+        option = request.form['option']
+        
+        if option == 'admin':
+            return redirect(url_for('admin'))
+        elif option == 'reservation':
+            return redirect(url_for('reservation'))
+        else:
+            return render_template('index.html', error='Please select an option')
+    
+    return render_template('index.html')
 
 @app.route('/')
 def index():
