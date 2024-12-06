@@ -33,7 +33,8 @@ def index():
         elif option == 'reservation':
             return redirect(url_for('reservation'))
         else:
-            return render_template('index.html', error='Please select an option')
+            flash('Please select an option', 'error')
+            return render_template('index.html')
     
     return render_template('index.html')
 
