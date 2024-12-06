@@ -121,5 +121,5 @@ def generate_reservation_code(length=12):
 
 if __name__ == "__main__":
     # http://localhost:5001/
-    app.run(host="0.0.0.0", port=5000)
+    app.run(port=5001)
 
