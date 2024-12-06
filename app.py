@@ -10,21 +10,19 @@ app = Flask(__name__)
 app.config["DEBUG"] = True
 app.secret_key = 'your_secret_key'  # Required for session management
 
+# connect to the database
 def get_db_connection():
     conn = sqlite3.connect('reservations.db')
     conn.row_factory = sqlite3.Row  # Allows access to columns by name (instead of index)
     return conn
 
-def get_cost_matrix():
-    cost_matrix = [[100, 75, 50, 100] for row in range(12)]
-    return cost_matrix
-
-# DEBUG for reserved_seats (row, seat) this should be empty for turn in.
+# generate list of reserved seats from the database
 reservations = []
 reserved_seats = get_db_connection().execute("SELECT seatRow, seatColumn FROM reservations").fetchall()
 for x,y in reserved_seats:
     reservations.append((x,y))
 
+# home page
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -39,6 +37,7 @@ def index():
     
     return render_template('index.html')
 
+# admin log in
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == 'POST':
@@ -61,18 +60,11 @@ def admin():
     
     return render_template('admin.html')
 
+# admin dashboard
 @app.route('/admin_dashboard')
 def admin_dashboard():
     if 'admin' not in session:
         return redirect(url_for('admin'))  # If not logged in, redirect to the login page
-
-    # Fetch the total sales data
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    cursor.execute('SELECT seatRow, seatColumn FROM reservations')  # Get total number of reservations (this can be used for total sales)
-    reservations = cursor.fetchall()
-    conn.close()
 
     #Calculate total sales
     cost_matrix= get_cost_matrix()
@@ -80,26 +72,16 @@ def admin_dashboard():
     for row, seat in reservations:
         total_sales += cost_matrix[row -1][seat -1]
 
+    return render_template('adminLoggedIn.html', total_sales=total_sales, reserved_seats=reservations)
 
-    # Generate the seating chart as a 4x12 grid
-    seating_chart = []
-    for row in range(0, 4):
-        row_seats = []
-        for col in range(0, 12):
-            if (row, col) in reservations:
-                row_seats.append('X')
-            else:
-                row_seats.append('O')
-        seating_chart.append(row_seats)
-
-    return render_template('adminLoggedIn.html', seating_chart=seating_chart, total_sales=total_sales)
-
+# admin log out
 @app.route('/admin_logout')
 def admin_logout():
     session.pop('admin', None)  # Remove the admin from the session
     flash('Logged out successfully!', 'success')
     return redirect(url_for('admin'))  # Redirect back to the login page
 
+# reservations page
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():
     if request.method == 'POST':
@@ -125,14 +107,16 @@ def reservation():
             flash(f'Reservation successful! Your reservation code is {reservation_code}. Row: {row}, Seat: {column}')
         
         conn.close()  # Close the database connection
-        return redirect(url_for('index'))
     
     return render_template('reservation.html', reserved_seats=reservations)
+
+def get_cost_matrix():
+    cost_matrix = [[100, 75, 50, 100] for row in range(12)]
+    return cost_matrix
 
 def generate_reservation_code(length=12):
     characters = string.ascii_uppercase + string.digits
     return ''.join(random.choice(characters) for _ in range(length))
-
 
 if __name__ == '__main__':
     app.run()

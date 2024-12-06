@@ -1,36 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Admin Dashboard - Reserve Your Seat</h1>
-
+    <h1>{% block title %} Admin Dashboard {% endblock %}</h1>
+    <br>
     {% if 'admin' in session %}
         <!-- If the admin is logged in, show the seating chart and total sales -->
-        <h2 style="font-weight: bold; margin-bottom: 10px;">Seating Chart</h2>
-        <div style="overflow-x: auto; display: inline-block;">
-            <table style="border-collapse: collapse;">
-                <thead>
+        <h2>Seating Chart:</h2>
+        <div>
+            <table>
+                <tr class="columns">
+                    <td></td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>
+                {% for row in range(0, 12) %}
                     <tr>
-                        <th style="padding: 4px; border: 1px solid black;">Row</th>
-                        {% for col in range(1, 5) %}
-                            <th style="padding: 4px; border: 1px solid black;">{{ col }}</th>
+                        <td class="rows">{{ row }}</td>
+                        {% for column in range(0, 4) %}
+                        <td>
+                            {% if (row, column) in reserved_seats %}
+                                X
+                            {% else %}
+                                O
+                            {% endif %}
+                        </td>
                         {% endfor %}
                     </tr>
-                </thead>
-                <tbody>
-                    {% for row_seats in seating_chart %}
-                        <tr>
-                            <td style="padding: 4px; border: 1px solid black;">{{ loop.index }}</td>
-                            {% for seat in row_seats %}
-                                <td style="padding: 4px; border: 1px solid black; width: 20px; text-align: center;">{{ seat }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
+                {% endfor %}
             </table>
         </div>
-
-        <h2>Total Sales</h2>
-        <p>Total sales: {{ total_sales }}</p>
+        <br>
+        <h2>Total Sales:</h2>
+        <p>${{ total_sales }}</p>
         <br>
         <a href="{{ url_for('admin_logout') }}">Logout</a>
     {% else %}

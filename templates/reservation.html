@@ -18,7 +18,7 @@
             <tr>
                 <td class="rows">{{ row }}</td>
                 {% for column in range(0, 4) %}
-                <td style="padding: 10px; text-align: center; border: 1 px solid black;">
+                <td>
                     {% if (row, column) in reserved_seats %}
                         X
                     {% else %}
