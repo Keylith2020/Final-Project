@@ -15,6 +15,10 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row  # Allows access to columns by name (instead of index)
     return conn
 
+def get_cost_matrix():
+    cost_matrix = [[100, 75, 50, 100] for row in range(12)]
+    return cost_matrix
+
 # DEBUG for reserved_seats (row, seat) this should be empty for turn in.
 reservations = []
 reserved_seats = get_db_connection().execute("SELECT seatRow, seatColumn FROM reservations").fetchall()
@@ -65,10 +69,17 @@ def admin_dashboard():
     # Fetch the total sales data
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT COUNT(*) FROM reservations')  # Get total number of reservations (this can be used for total sales)
-    total_sales = cursor.fetchone()[0]  # Example: Total reservations count as sales (modify as needed)
 
+    cursor.execute('SELECT seatRow, seatColumn FROM reservations')  # Get total number of reservations (this can be used for total sales)
+    reservations = cursor.fetchall()
     conn.close()
+
+    #Calculate total sales
+    cost_matrix= get_cost_matrix()
+    total_sales = 0
+    for row, seat in reservations:
+        total_sales += cost_matrix[row -1][seat -1]
+
 
     # Generate the seating chart as a 4x12 grid
     seating_chart = []
@@ -122,9 +133,6 @@ def generate_reservation_code(length=12):
     characters = string.ascii_uppercase + string.digits
     return ''.join(random.choice(characters) for _ in range(length))
 
-def get_cost_matrix():
-    cost_matrix = [[100, 75, 50, 100] for row in range(12)]
-    return cost_matrix
 
 if __name__ == '__main__':
     app.run()
